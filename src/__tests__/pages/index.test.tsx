@@ -1,5 +1,6 @@
-import IndexPage from "@/pages";
 import { render } from "@testing-library/react";
+
+import IndexPage from "@/pages";
 
 /** Mock Seo"s useRouter */
 jest.mock("next/router", () => ({
@@ -12,9 +13,7 @@ jest.mock("next/router", () => ({
 
 describe("Index Page", () => {
     it("renders index page", async () => {
-        const { container } = render(
-            <IndexPage />
-        );
+        const { container } = render(<IndexPage />);
 
         expect(container.firstChild?.hasChildNodes()).toBeTruthy();
     });
