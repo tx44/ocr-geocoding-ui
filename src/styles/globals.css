@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+}
+
+@layer base {
+    a {
+        @apply text-stone-700 transition hover:text-stone-800 focus:outline-sky-500;
+    }
+}
+
+#__next {
+    @apply flex h-screen flex-col text-base leading-normal tracking-normal text-stone-600;
+}
