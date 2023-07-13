@@ -1,7 +1,7 @@
+import { Point } from "heatmap";
 import * as React from "react";
 
 import IndexPageTemplate from "@/components/templates/IndexPage/IndexPage";
-import { Point } from "heatmap";
 
 const samplePoints: Point[] = [
     [42.536457, -70.985786, 1],

@@ -1,10 +1,10 @@
 import { HeatmapLayerFactory } from "@vgrid/react-leaflet-heatmap-layer";
+import { Point } from "heatmap";
 import { LatLngExpression } from "leaflet";
 import { CSSProperties } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
 
 import "leaflet/dist/leaflet.css";
-import { Point } from "heatmap";
 
 const DEFAULT_COORDS: LatLngExpression = [38.96, -98.6];
 const DEFAULT_ZOOM_LEVEL = 5;

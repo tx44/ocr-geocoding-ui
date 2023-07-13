@@ -18,7 +18,11 @@ const IndexPageTemplate = (props: IIndexPageTemplate) => {
                 <HeatMap points={props.points} />
             </div>
             <div className="absolute bottom-0 left-0 right-0 h-48 overflow-auto bg-white-900 px-6 pt-2 pb-4">
-                <Attach multiple={true} rootClassName="h-full" subLabel="Upload receipts and get a heatmap coverage" />
+                <Attach
+                    multiple={true}
+                    rootClassName="h-full"
+                    subLabel="Upload receipts and get a heatmap coverage"
+                />
             </div>
         </main>
     );
