@@ -39,9 +39,7 @@ https://www.veryfi.com/nodejs/
 
 https://app.veryfi.com/api/docs/
 
-## Features
-
-This repository is 🔋 battery packed with:
+## Tech inside
 
 -   ⚡️ Next.js 13
 -   ⚛️ React 18
@@ -55,3 +53,23 @@ This repository is 🔋 battery packed with:
 -   🤖 Conventional Commit Lint — Make sure you & your teammates follow conventional commit
 -   ⏰ Standard Version Changelog — Generate your changelog using `yarn release`
 -   👷 Github Actions — Lint your code on PR
+
+## Sequence diagram
+
+```mermaid
+sequenceDiagram
+    participant browser as Browser (React CSR)
+    participant node as Node.js (React SSR + Next.js API Routes)
+    participant veryfi as Veryfi OCR API
+
+    Note over browser,veryfi: Access Veryfi API with credentials
+    browser->>node: HTTP POST /api/veryfi/upload
+    node->>veryfi: HTTP POST https://api.veryfi.com/api/v8/documents
+    veryfi->>node: HTTP 200 OK response with Document JSON
+    node->>browser: HTTP 200 OK response with reduced Document JSON
+
+    browser->>node: HTTP DELETE /api/veryfi/remove/${document_id}
+    node->>veryfi: HTTP DELETE https://api.veryfi.com/api/v8/documents/${document_id}
+    veryfi->>node: HTTP 200 OK response
+    node->>browser: HTTP 200 OK response
+```
