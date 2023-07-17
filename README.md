@@ -58,11 +58,11 @@ https://app.veryfi.com/api/docs/
 
 ```mermaid
 sequenceDiagram
-    participant browser as Browser (React CSR)
-    participant node as Node.js (React SSR + Next.js API Routes)
+    participant browser as Browser (React on client-side)
+    participant node as Node.js (Next.js API Routes)
     participant veryfi as Veryfi OCR API
 
-    Note over browser,veryfi: Access Veryfi API with credentials
+    Note over node,veryfi: Access Veryfi API with credentials
     browser->>node: HTTP POST /api/veryfi/upload
     node->>veryfi: HTTP POST https://api.veryfi.com/api/v8/documents
     veryfi->>node: HTTP 200 OK response with Document JSON
