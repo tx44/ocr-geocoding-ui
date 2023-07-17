@@ -16,7 +16,7 @@ interface AttachProps {
     rootClassName?: string;
     onChange?: (files: FileItem[]) => void;
     onSave?: (file: File, fileId: string) => Promise<void>;
-    onRemove?: (file: FileItem) => Promise<boolean>;
+    onRemove?: (file: FileItem) => Promise<void>;
 }
 
 const Attach = (props: AttachProps) => {
@@ -139,7 +139,7 @@ const Attach = (props: AttachProps) => {
                             return (
                                 <li
                                     key={file.name}
-                                    className="mb-2.5 flex h-8 items-center justify-center"
+                                    className="mb-2.5 flex h-8 items-center"
                                 >
                                     {file.type.includes("image") ? (
                                         <span className="flex-shrink-0 px-1">
@@ -170,10 +170,12 @@ const Attach = (props: AttachProps) => {
                                         )}
                                     </span>
 
-                                    <TrashIcon
-                                        className="ml-auto h-5 w-5 flex-shrink-0 cursor-pointer"
-                                        onClick={() => handleRemove(file)}
-                                    />
+                                    {!file.isUploading && (
+                                        <TrashIcon
+                                            className="ml-auto h-5 w-5 flex-shrink-0 cursor-pointer"
+                                            onClick={() => handleRemove(file)}
+                                        />
+                                    )}
                                 </li>
                             );
                         })}

@@ -15,7 +15,7 @@ interface IIndexPageTemplate {
     points: Point[];
     onChange: (file: FileItem[]) => void;
     onSave: (file: File, fileId: string) => Promise<void>;
-    onRemove: (file: FileItem) => Promise<boolean>;
+    onRemove: (file: FileItem) => Promise<void>;
 }
 
 const IndexPageTemplate = (props: IIndexPageTemplate) => {

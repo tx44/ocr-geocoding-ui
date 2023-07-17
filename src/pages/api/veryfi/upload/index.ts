@@ -22,16 +22,14 @@ router.post(async (req: NextApiRequest, res: NextApiResponse) => {
 
             const id = fields?.id?.[0];
             const filePath = files?.blob?.[0].path;
-
-            const veryfiClient = new Client(...getVeryfiClientConfig());
-
-            console.log(
-                `Request process_document for ${filePath} is processing to Veryfi API`
-            );
-
             let result = null;
 
             try {
+                const veryfiClient = new Client(...getVeryfiClientConfig());
+                console.log(
+                    `Request process_document for ${filePath} is processing to Veryfi API`
+                );
+
                 const response = await veryfiClient.process_document(filePath);
                 console.log(
                     `Got response from Veryfi API for ${filePath} with id: ${response?.id}, lat: ${response?.vendor?.lat} and lng: ${response?.vendor?.lng}`
@@ -45,9 +43,9 @@ router.post(async (req: NextApiRequest, res: NextApiResponse) => {
                         lng: response.vendor?.lng,
                     };
                 }
-            } catch (e) {
+            } catch (err) {
                 res.status(500).end(ErrorMessages.VeryfiAPIError);
-                return reject(e);
+                return reject(err);
             }
 
             return resolve(result);

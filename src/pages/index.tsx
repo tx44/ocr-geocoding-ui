@@ -7,7 +7,8 @@ import { FileItem } from "@/lib/file";
 
 import IndexPageTemplate from "@/components/templates/IndexPage/IndexPage";
 
-import { uploadReceipt } from "@/client/upload";
+import { removeReceipt } from "@/client/removeReceipt";
+import { uploadReceipt } from "@/client/uploadReceipt";
 
 const IndexPage = () => {
     const [files, setFiles] = useState<FileItem[]>([]);
@@ -58,7 +59,7 @@ const IndexPage = () => {
                             return {
                                 ...file,
                                 isUploading: false,
-                                error: "Can't find data of vendor's coordinates",
+                                error: "Can't extract data of vendor's coordinates",
                             };
                         }
                         return file;
@@ -91,10 +92,23 @@ const IndexPage = () => {
             fileId,
         });
     };
-    const handleReceiptRemove = (currentFile: FileItem): Promise<boolean> => {
+    const handleReceiptRemove = (currentFile: FileItem): Promise<void> => {
         setFiles((files) => files.filter((file) => currentFile.id !== file.id));
-        // TODO: Call Remove in Veryfi API
-        return new Promise(() => true);
+
+        let pointId;
+        const newPoints = points.filter((point) => {
+            if (currentFile.id === point.id) {
+                pointId = point.veryfiId;
+            }
+            return currentFile.id !== point.id;
+        });
+        setPoints(newPoints);
+
+        if (pointId === undefined) {
+            return Promise.reject();
+        }
+
+        return removeReceipt(pointId);
     };
 
     return (
