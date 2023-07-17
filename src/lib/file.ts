@@ -1,9 +1,8 @@
-export const FileItemId = Symbol("FileItemId");
-
-export interface FileItem {
-    [FileItemId]?: number;
+export type FileItem = {
+    id?: string;
     src?: string;
     name: string;
     type: string;
     isUploading?: boolean;
-}
+    error?: string;
+};

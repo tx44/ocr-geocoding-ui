@@ -1,13 +1,13 @@
 import { HeatmapLayerFactory } from "@vgrid/react-leaflet-heatmap-layer";
-import { Point } from "heatmap";
+import type { Point } from "heatmap";
 import { LatLngExpression } from "leaflet";
 import { CSSProperties } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
 
 import "leaflet/dist/leaflet.css";
 
-const DEFAULT_COORDS: LatLngExpression = [38.96, -98.6];
-const DEFAULT_ZOOM_LEVEL = 5;
+const DEFAULT_COORDS: LatLngExpression = [32.96, -95.0];
+const DEFAULT_ZOOM_LEVEL = 4;
 
 const fitScreenStyle = {
     top: 0,
@@ -29,6 +29,9 @@ interface IHeatMap {
 const HeatmapLayer = HeatmapLayerFactory<[number, number, number]>();
 
 const HeatMap = (props: IHeatMap) => {
+    // TODO: Calculate Max Intensity on-the-fly (don't forget about useMemo hook with props.points deps)
+    // const maxIntensity = 200;
+
     return (
         <div
             style={{
@@ -46,10 +49,14 @@ const HeatMap = (props: IHeatMap) => {
                 <HeatmapLayer
                     fitBoundsOnLoad={false}
                     fitBoundsOnUpdate={false}
-                    points={props.points}
-                    longitudeExtractor={(point: Point) => point[1]}
-                    latitudeExtractor={(point: Point) => point[0]}
-                    intensityExtractor={(point: Point) => point[2]}
+                    points={props.points.map((point: Point) => [
+                        point.lat,
+                        point.lng,
+                        0.2,
+                    ])}
+                    longitudeExtractor={(p: [number, number, number]) => p[1]}
+                    latitudeExtractor={(p: [number, number, number]) => p[0]}
+                    intensityExtractor={(p: [number, number, number]) => p[2]}
                 />
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>'

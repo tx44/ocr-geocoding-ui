@@ -1,9 +1,10 @@
 import { DocumentIcon, TrashIcon } from "@heroicons/react/24/outline";
-import React, { ReactNode, useState } from "react";
+import { createId } from "@paralleldrive/cuid2";
+import React, { ReactNode, useEffect, useState } from "react";
 import { Accept, useDropzone } from "react-dropzone";
 
 import clsxm from "@/lib/clsxm";
-import { FileItem, FileItemId } from "@/lib/file";
+import { FileItem } from "@/lib/file";
 
 interface AttachProps {
     icon?: ReactNode;
@@ -14,13 +15,19 @@ interface AttachProps {
     value?: FileItem[];
     rootClassName?: string;
     onChange?: (files: FileItem[]) => void;
-    onSave?: (file: File) => Promise<FileItem>;
+    onSave?: (file: File, fileId: string) => Promise<void>;
     onRemove?: (file: FileItem) => Promise<boolean>;
 }
 
-function Attach(props: AttachProps) {
+const Attach = (props: AttachProps) => {
     const [isDragEnter, setIsDragEnter] = useState(false);
     const [files, setFiles] = useState<FileItem[]>(props.value ?? []);
+
+    useEffect(() => {
+        if (props.value !== undefined) {
+            setFiles(props.value);
+        }
+    }, [props.value]);
 
     const getDefaultFile = (file: File) => {
         return {
@@ -30,55 +37,49 @@ function Attach(props: AttachProps) {
         };
     };
 
-    const handleSave = async (file: File) => {
-        if (props.onSave) {
-            return props.onSave(file);
+    const handleSave = async (file: File, fileId: string) => {
+        if (props.onSave !== undefined) {
+            return props.onSave(file, fileId);
         }
 
         return Promise.resolve(getDefaultFile(file));
     };
 
     const handleRemove = async (file: FileItem) => {
-        if (props.onRemove) {
+        if (props.onRemove !== undefined) {
             await props.onRemove(file);
         }
 
         const newFiles = files.filter((item) => item.src !== file.src);
         setFiles(newFiles);
-        props.onChange && props.onChange(newFiles);
+
+        if (props.onChange !== undefined) {
+            props.onChange(newFiles);
+        }
     };
 
     const handleDrop = async (acceptedFiles: File[]) => {
         const newFiles = [...files];
-        let id = files.length;
 
         for (const file of acceptedFiles) {
-            const fileId = id++;
+            const fileId = createId();
             newFiles.push({
-                [FileItemId]: fileId,
+                id: fileId,
+                src: getDefaultFile(file).src,
                 name: file.name,
                 type: file.type,
-                isUploading: true,
             });
-            handleSave(file).then((item) => {
-                const uploadedFile = newFiles.find(
-                    (item) => item[FileItemId] === fileId
-                );
 
-                if (!uploadedFile) {
-                    return;
-                }
-
-                uploadedFile.isUploading = false;
-                uploadedFile.src = item?.src ?? getDefaultFile(file).src;
-
-                setFiles([...newFiles]);
-            });
+            handleSave(file, fileId);
         }
 
-        setFiles(newFiles);
+        if (props.onChange !== undefined) {
+            props.onChange(newFiles);
+        } else {
+            setFiles(newFiles);
+        }
+
         setIsDragEnter(false);
-        props.onChange && props.onChange(newFiles);
     };
 
     const { getRootProps, getInputProps } = useDropzone({
@@ -132,7 +133,7 @@ function Attach(props: AttachProps) {
                 )}
             </div>
             {Array.isArray(files) && files.length > 0 && (
-                <aside>
+                <div>
                     <ul className="ml-4 mt-4">
                         {files.map((file) => {
                             return (
@@ -152,9 +153,23 @@ function Attach(props: AttachProps) {
                                         <DocumentIcon className="h-4 w-4 flex-shrink-0 rounded-xl bg-black-50 p-1" />
                                     )}
 
-                                    <span className="mx-2.5 overflow-hidden text-ellipsis whitespace-nowrap text-sm text-black-800">
-                                        {file.name}
+                                    <span className="flex items-baseline">
+                                        <span className="mx-2.5 overflow-hidden text-ellipsis whitespace-nowrap text-sm text-black-800">
+                                            {file.name}
+                                        </span>
+                                        {file.isUploading && (
+                                            <span className="text-xs text-black-400 after:inline-block after:w-0 after:animate-ellipsis after:overflow-hidden after:align-bottom after:content-['\2026']">
+                                                Processing
+                                            </span>
+                                        )}
+                                        {file.error && (
+                                            <span className="text-xs text-red-400">
+                                                {file.error ??
+                                                    "Error on processing"}
+                                            </span>
+                                        )}
                                     </span>
+
                                     <TrashIcon
                                         className="ml-auto h-5 w-5 flex-shrink-0 cursor-pointer"
                                         onClick={() => handleRemove(file)}
@@ -163,10 +178,10 @@ function Attach(props: AttachProps) {
                             );
                         })}
                     </ul>
-                </aside>
+                </div>
             )}
         </div>
     );
-}
+};
 
 export default Attach;

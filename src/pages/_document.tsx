@@ -9,8 +9,6 @@ import { CSSProperties } from "react";
 
 import Favicon from "@/components/atoms/Favicon/Favicon";
 
-// TODO: Make fixed styling only for main page
-// https://www.bram.us/2016/05/02/prevent-overscroll-bounce-in-ios-mobilesafari-pure-css/
 const absoluteFitScreenStyle = {
     position: "fixed",
     top: 0,

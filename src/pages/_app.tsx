@@ -7,7 +7,7 @@ import "@/styles/map.css";
 
 const queryClient = new QueryClient();
 
-function App({ Component, pageProps }: AppProps) {
+const App = ({ Component, pageProps }: AppProps) => {
     return (
         <>
             <Head>
@@ -27,6 +27,6 @@ function App({ Component, pageProps }: AppProps) {
             </QueryClientProvider>
         </>
     );
-}
+};
 
 export default App;
