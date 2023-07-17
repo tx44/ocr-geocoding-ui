@@ -142,7 +142,7 @@ const Attach = (props: AttachProps) => {
                                     className="mb-2.5 flex h-8 items-center"
                                 >
                                     {file.type.includes("image") ? (
-                                        <span className="flex-shrink-0 px-1">
+                                        <span className="w-[24px] flex-shrink-0 px-1">
                                             <img
                                                 alt={file.name}
                                                 className="h-6"

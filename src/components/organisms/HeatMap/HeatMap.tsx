@@ -1,7 +1,7 @@
 import { HeatmapLayerFactory } from "@vgrid/react-leaflet-heatmap-layer";
 import type { Point } from "heatmap";
 import { LatLngExpression } from "leaflet";
-import { CSSProperties } from "react";
+import { CSSProperties, useMemo } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
 
 import "leaflet/dist/leaflet.css";
@@ -29,8 +29,18 @@ interface IHeatMap {
 const HeatmapLayer = HeatmapLayerFactory<[number, number, number]>();
 
 const HeatMap = (props: IHeatMap) => {
-    // TODO: Calculate Max Intensity on-the-fly (don't forget about useMemo hook with props.points deps)
-    // const maxIntensity = 200;
+    /**
+     * Calculate intensity param on-the-fly
+     */
+    const points = useMemo(() => {
+        const maxTotal = Math.max(...props.points.map((point) => point.total));
+        return props.points.map((point) => {
+            return {
+                ...point,
+                intensity: point.total / maxTotal ?? 1,
+            };
+        });
+    }, [props.points]);
 
     return (
         <div
@@ -49,7 +59,7 @@ const HeatMap = (props: IHeatMap) => {
                 <HeatmapLayer
                     fitBoundsOnLoad={false}
                     fitBoundsOnUpdate={false}
-                    points={props.points.map((point: Point) => [
+                    points={points.map((point: Point) => [
                         point.lat,
                         point.lng,
                         0.2,

@@ -41,6 +41,7 @@ router.post(async (req: NextApiRequest, res: NextApiResponse) => {
                         veryfiId: response.id,
                         lat: response.vendor?.lat,
                         lng: response.vendor?.lng,
+                        total: response.total,
                     };
                 }
             } catch (err) {
