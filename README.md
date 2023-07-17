@@ -31,6 +31,8 @@ It uploads all receipts to Veryfi API and extracts useful data on it: geo coordi
 
 You can get testing images of receipts in `data/receipts` directory. Please note, that Veryfi API has a limit of 50 uploads per month for a free account. For heatmap visualization, this is not a very large number, so we recommend attaching all 25 testing images. Some of them (1001-receipt.jpg, 1008-receipt.jpg, etc...) are not have any address to convert them into geo coordinates, so we inform it in UI with inline error "Can't extract data of vendor's coordinates". You can get "Error on calling Veryfi API" error message near file name on processing when.
 
+Testing receipt images are part of [The ExpressExpense SRD (sample receipt dataset for machine learning) of restaurant receipts](https://expressexpense.com/blog/free-receipt-images-ocr-machine-learning-dataset/).
+
 ## Veryfi: useful sources
 
 https://www.veryfi.com/nodejs/
