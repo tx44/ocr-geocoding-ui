@@ -33,6 +33,10 @@ You can get testing images of receipts in `data/receipts` directory. Please note
 
 Testing receipt images are part of [The ExpressExpense SRD (sample receipt dataset for machine learning) of restaurant receipts](https://expressexpense.com/blog/free-receipt-images-ocr-machine-learning-dataset/).
 
+## Unit tests
+
+`yarn test`
+
 ## Veryfi: useful sources
 
 https://www.veryfi.com/nodejs/
